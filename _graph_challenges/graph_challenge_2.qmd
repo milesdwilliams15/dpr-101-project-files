@@ -1,7 +1,7 @@
 ---
 title: "Graph Challenge 2"
-author: Your Name Here
-date: "`r Sys.Date()`"
+author: "Your Name Here"
+date: "Date: `r Sys.Date()`"
 format: 
   docx:
     reference-doc: ../quarto_template.docx
@@ -9,9 +9,37 @@ format:
     number-depth: 3
     fig-dpi: 500
     fig-align: center
+    fig-height: 4
+    fig-width: 6
 execute: 
   echo: true
   warning: false
   message: false
 ---
 
+**Instructions**: For this graph challenge, use the `florida.csv` and `florida_map.csv` datasets to create four data visualizations.
+
+For the first, create a map with county-level detail of the state of Florida that shows the concentration of votes in favor of Pat Buchanan in 2000 (the variable `dlib_00`), and that highlights Palm Beach County using a thick black line for its boundary.
+
+For the second data viz, create a scatter plot that shows how concentrated the vote for Ross Perot was in counties in 1996 (`dlib_96`) on the x-axis and how concentrated the vote for Pat Buchanan was in counties in 2000 (`dlib_00`) on the y-axis. Layer over the scatter plot a linear regression line of best fit. Use the `gghighlight()` function from the `{gghighlight}` package to highlight the data point for Palm Beach.
+
+For the third and fourth data visualizations, repeat 1 and 2 but use the variable `plib_00` for the map and `plib_96` and `plib_00` for the scatter plot.
+
+Once you've made these figures, provide a short written response to the following questions: (1) ***Why does looking at the concentration of the Libertarian vote ("dlib") alter our conclusions about whether Palm Beach is an outlier in the 2000 US Presidential election as compared to looking at the Libertarian Party's share of the total vote ("plib");*** and (2) ***which way of presenting the data provides a more accurate picture of Palm Beach relative to other counties?***
+
+```{r}
+## Write your code to open the packages you need here:
+
+## Write the code to read in the data here:
+
+```
+
+```{r}
+## Write your code to make the map of Florida here:
+
+```
+
+```{r}
+## Write your code to make the scatter plot here:
+
+```
