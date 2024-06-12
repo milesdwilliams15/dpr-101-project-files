@@ -47,9 +47,7 @@ florida |>
       dem_00:lib_00,
       ~ .x / (dem_00 + rep_00 + lib_00),
       .names = "p{.col}"
-    ),
-    dlib_96 = lib_96 / sum(lib_96),
-    dlib_00 = lib_00 / sum(lib_00)
+    )
   ) |>
   write_csv(
   here::here(
