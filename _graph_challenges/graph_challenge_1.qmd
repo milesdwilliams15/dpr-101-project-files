@@ -1,7 +1,7 @@
 ---
 title: "Graph Challenge 1"
 author: "Your Name Here"
-date: "Date: `r Sys.Date()`"
+date: "`r Sys.Date()`"
 format: 
   docx:
     reference-doc: ../quarto_template.docx
