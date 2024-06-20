@@ -1,0 +1,20 @@
+---
+title: "Graph Challenge 3"
+author: "Your Name Here"
+date: "Date: `r Sys.Date()`"
+format: 
+  docx:
+    reference-doc: ../quarto_template.docx
+    number-sections: true
+    number-depth: 3
+    fig-dpi: 500
+    fig-align: center
+    fig-height: 4
+    fig-width: 6
+execute: 
+  echo: true
+  warning: false
+  message: false
+---
+
+
