@@ -326,3 +326,14 @@ tidydt <- tidydt |>
       str_to_lower
     )
   )
+
+## save the data as .rds to make
+## more efficient
+write_rds(
+  tidydt,
+  here::here(
+    "_data",
+    "countypres_2000-2020.rds"
+  )
+)
+rm(list = ls())
