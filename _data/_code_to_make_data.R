@@ -278,3 +278,51 @@ write_csv(
   )
 )
 rm(list = ls()) ## clean up
+
+
+# elections_2000-2020.csv -------------------------------------------------
+
+library(tidyverse)
+read_csv(
+  here::here(
+    "_data",
+    "mit_countypres_2000-2020.csv"
+  )
+) -> dt
+
+## the data isn't tidy, so let's fix that
+dt |>
+  ## keep only the columns I need
+  select( # drop these
+    - state_po,
+    - candidate,
+    - office,
+    - version,
+    - mode
+  ) |>
+  ## pivot wider on candidates and votes
+  #group_by(state, county_name) |>
+  mutate(row = row_number()) |>
+  pivot_wider(
+    names_from = party,
+    values_from = candidatevotes
+  ) |>
+  select(-row) |>
+  group_by(year, state, county_name) |>
+  summarize(
+    across(county_fips:LIBERTARIAN,
+           ~ median(.x, na.rm = T)),
+    .groups = "drop"
+  ) -> tidydt
+
+## make stuff lowercase
+colnames(tidydt) <- tidydt |>
+  colnames() |>
+  str_to_lower()
+tidydt <- tidydt |>
+  mutate(
+    across(
+      state:county_name,
+      str_to_lower
+    )
+  )
