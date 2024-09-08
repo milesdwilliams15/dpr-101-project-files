@@ -1,0 +1,20 @@
+---
+title: "Graph Challenge"
+author: "Your Name Here"
+date: "Date: `r Sys.Date()`"
+format: 
+  docx:
+    reference-doc: ../quarto_template.docx
+    number-sections: true
+    number-depth: 3
+    fig-dpi: 500
+    fig-align: center
+    fig-height: 4
+    fig-width: 6
+execute: 
+  echo: true
+  warning: false
+  message: false
+---
+
+This is a starter template for you to help you get started with your graph challenges. Simply delete this text and then follow the relevant assignment promp. Then, render your work and submit the .docx file by the due date for credit.

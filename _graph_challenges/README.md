@@ -1,3 +1,3 @@
 ## The _graph_challenges folder
 
-This folder contains starter Quarto templates with prompts to complete graph challenges in DPR 101.
+This folder contains starter Quarto template for graph challenges in DPR 101.
