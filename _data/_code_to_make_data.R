@@ -337,3 +337,219 @@ write_rds(
   )
 )
 rm(list = ls())
+
+
+
+# fraud.csv ---------------------------------------------------------------
+
+## The Heritage Foundation has a database of fraud
+## claims. But they didn't store it in a sensible way.
+## I need to write some code to scrape their database
+## then save it in a tidy format to share with students.
+
+## open {tidyverse} and {rvest}
+library(tidyverse)
+library(rvest) # "rvest" instead of "harvest"
+
+## extract the data on fraud cases
+read_html(
+  "https://www.heritage.org/voterfraud-print/search"
+) |>
+  html_node(
+    "#voterfraud-print-view"
+  ) |>
+  html_elements("span") |>
+  html_text2() -> out
+
+## I now have a character vector that I need to convert to a data frame
+out[
+  out != "Source:"
+][
+  seq(13, length(out), by = 3)
+] |> 
+  na.omit() -> cln_out 
+
+tibble(
+  cln_out = cln_out,
+  name = rep(
+    c("state", "year", "name", "case", "fraud"),
+    len = length(cln_out)
+  )
+) |>
+  pivot_wider(
+    values_from = cln_out,
+    names_from = name
+  ) |>
+  unnest() -> Data
+
+## Fix one missing year
+Data$year <- Data$year |>
+  as.numeric() |>
+  replace_na(2018)
+
+## now read in the data on election integrity
+## score cards --- thankfully this one is in a 
+## table!
+
+the_code <- minimal_html('
+  <tr><td class="selectedColumn" style="background-color: rgb(0, 130, 66); color: white;">1</td><td class="nonSelectedColumn"><a href="states/tn.html">Tennessee</a></td><td class="nonSelectedColumn">90</td><td class="nonSelectedColumn">20</td><td class="nonSelectedColumn">26</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(0, 130, 66); color: white;">2-t</td><td class="nonSelectedColumn"><a href="states/al.html">Alabama</a></td><td class="nonSelectedColumn">83</td><td class="nonSelectedColumn">20</td><td class="nonSelectedColumn">22</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(0, 130, 66); color: white;">2-t</td><td class="nonSelectedColumn"><a href="states/fl.html">Florida</a></td><td class="nonSelectedColumn">83</td><td class="nonSelectedColumn">19</td><td class="nonSelectedColumn">23</td><td class="nonSelectedColumn">16</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(0, 130, 66); color: white;">2-t</td><td class="nonSelectedColumn"><a href="states/ga.html">Georgia</a></td><td class="nonSelectedColumn">83</td><td class="nonSelectedColumn">20</td><td class="nonSelectedColumn">22</td><td class="nonSelectedColumn">17</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(0, 130, 66); color: white;">5</td><td class="nonSelectedColumn"><a href="states/ok.html">Oklahoma</a></td><td class="nonSelectedColumn">82</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">22</td><td class="nonSelectedColumn">19</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(0, 130, 66); color: white;">6</td><td class="nonSelectedColumn"><a href="states/sc.html">South Carolina</a></td><td class="nonSelectedColumn">81</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">21</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(0, 130, 66); color: white;">7-t</td><td class="nonSelectedColumn"><a href="states/ar.html">Arkansas</a></td><td class="nonSelectedColumn">80</td><td class="nonSelectedColumn">20</td><td class="nonSelectedColumn">20</td><td class="nonSelectedColumn">17</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(0, 130, 66); color: white;">7-t</td><td class="nonSelectedColumn"><a href="states/mo.html">Missouri</a></td><td class="nonSelectedColumn">80</td><td class="nonSelectedColumn">20</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">19</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(0, 130, 66); color: white;">9-t</td><td class="nonSelectedColumn"><a href="states/in.html">Indiana</a></td><td class="nonSelectedColumn">79</td><td class="nonSelectedColumn">20</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">17</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(0, 130, 66); color: white;">9-t</td><td class="nonSelectedColumn"><a href="states/la.html">Louisiana</a></td><td class="nonSelectedColumn">79</td><td class="nonSelectedColumn">16</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">19</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(193, 217, 75); color: black;">11-t</td><td class="nonSelectedColumn"><a href="states/oh.html">Ohio</a></td><td class="nonSelectedColumn">76</td><td class="nonSelectedColumn">20</td><td class="nonSelectedColumn">20</td><td class="nonSelectedColumn">12</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(193, 217, 75); color: black;">11-t</td><td class="nonSelectedColumn"><a href="states/wi.html">Wisconsin</a></td><td class="nonSelectedColumn">76</td><td class="nonSelectedColumn">20</td><td class="nonSelectedColumn">20</td><td class="nonSelectedColumn">15</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(193, 217, 75); color: black;">13</td><td class="nonSelectedColumn"><a href="states/tx.html">Texas</a></td><td class="nonSelectedColumn">75</td><td class="nonSelectedColumn">16</td><td class="nonSelectedColumn">19</td><td class="nonSelectedColumn">16</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(193, 217, 75); color: black;">14</td><td class="nonSelectedColumn"><a href="states/ky.html">Kentucky</a></td><td class="nonSelectedColumn">74</td><td class="nonSelectedColumn">16</td><td class="nonSelectedColumn">17</td><td class="nonSelectedColumn">16</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(193, 217, 75); color: black;">15</td><td class="nonSelectedColumn"><a href="states/ia.html">Iowa</a></td><td class="nonSelectedColumn">72</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">20</td><td class="nonSelectedColumn">16</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(193, 217, 75); color: black;">16-t</td><td class="nonSelectedColumn"><a href="states/ks.html">Kansas</a></td><td class="nonSelectedColumn">71</td><td class="nonSelectedColumn">20</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">10</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(193, 217, 75); color: black;">16-t</td><td class="nonSelectedColumn"><a href="states/ms.html">Mississippi</a></td><td class="nonSelectedColumn">71</td><td class="nonSelectedColumn">17</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">14</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(193, 217, 75); color: black;">18</td><td class="nonSelectedColumn"><a href="states/nc.html">North Carolina</a></td><td class="nonSelectedColumn">70</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">15</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(193, 217, 75); color: black;">19</td><td class="nonSelectedColumn"><a href="states/ne.html">Nebraska</a></td><td class="nonSelectedColumn">68</td><td class="nonSelectedColumn">20</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">15</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(193, 217, 75); color: black;">20</td><td class="nonSelectedColumn"><a href="states/sd.html">South Dakota</a></td><td class="nonSelectedColumn">66</td><td class="nonSelectedColumn">13</td><td class="nonSelectedColumn">20</td><td class="nonSelectedColumn">17</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(255, 242, 0); color: black;">21-t</td><td class="nonSelectedColumn"><a href="states/mt.html">Montana</a></td><td class="nonSelectedColumn">65</td><td class="nonSelectedColumn">10</td><td class="nonSelectedColumn">19</td><td class="nonSelectedColumn">17</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(255, 242, 0); color: black;">21-t</td><td class="nonSelectedColumn"><a href="states/nh.html">New Hampshire</a></td><td class="nonSelectedColumn">65</td><td class="nonSelectedColumn">17</td><td class="nonSelectedColumn">16</td><td class="nonSelectedColumn">16</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(255, 242, 0); color: black;">23</td><td class="nonSelectedColumn"><a href="states/va.html">Virginia</a></td><td class="nonSelectedColumn">63</td><td class="nonSelectedColumn">14</td><td class="nonSelectedColumn">21</td><td class="nonSelectedColumn">13</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(255, 242, 0); color: black;">24-t</td><td class="nonSelectedColumn"><a href="states/az.html">Arizona</a></td><td class="nonSelectedColumn">62</td><td class="nonSelectedColumn">7</td><td class="nonSelectedColumn">19</td><td class="nonSelectedColumn">14</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(255, 242, 0); color: black;">24-t</td><td class="nonSelectedColumn"><a href="states/pa.html">Pennsylvania</a></td><td class="nonSelectedColumn">62</td><td class="nonSelectedColumn">10</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">13</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(255, 242, 0); color: black;">24-t</td><td class="nonSelectedColumn"><a href="states/ri.html">Rhode Island</a></td><td class="nonSelectedColumn">62</td><td class="nonSelectedColumn">13</td><td class="nonSelectedColumn">23</td><td class="nonSelectedColumn">15</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(255, 242, 0); color: black;">27</td><td class="nonSelectedColumn"><a href="states/mi.html">Michigan</a></td><td class="nonSelectedColumn">57</td><td class="nonSelectedColumn">13</td><td class="nonSelectedColumn">17</td><td class="nonSelectedColumn">14</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(255, 242, 0); color: black;">28-t</td><td class="nonSelectedColumn"><a href="states/ak.html">Alaska</a></td><td class="nonSelectedColumn">56</td><td class="nonSelectedColumn">13</td><td class="nonSelectedColumn">19</td><td class="nonSelectedColumn">13</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(255, 242, 0); color: black;">28-t</td><td class="nonSelectedColumn"><a href="states/dc.html">District of Columbia</a></td><td class="nonSelectedColumn">56</td><td class="nonSelectedColumn">12</td><td class="nonSelectedColumn">22</td><td class="nonSelectedColumn">10</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(255, 242, 0); color: black;">28-t</td><td class="nonSelectedColumn"><a href="states/id.html">Idaho</a></td><td class="nonSelectedColumn">56</td><td class="nonSelectedColumn">9</td><td class="nonSelectedColumn">17</td><td class="nonSelectedColumn">15</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(247, 148, 29); color: black;">31-t</td><td class="nonSelectedColumn"><a href="states/md.html">Maryland</a></td><td class="nonSelectedColumn">54</td><td class="nonSelectedColumn">6</td><td class="nonSelectedColumn">25</td><td class="nonSelectedColumn">10</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(247, 148, 29); color: black;">31-t</td><td class="nonSelectedColumn"><a href="states/wv.html">West Virginia</a></td><td class="nonSelectedColumn">54</td><td class="nonSelectedColumn">9</td><td class="nonSelectedColumn">19</td><td class="nonSelectedColumn">14</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(247, 148, 29); color: black;">33-t</td><td class="nonSelectedColumn"><a href="states/ut.html">Utah</a></td><td class="nonSelectedColumn">53</td><td class="nonSelectedColumn">6</td><td class="nonSelectedColumn">24</td><td class="nonSelectedColumn">7</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(247, 148, 29); color: black;">33-t</td><td class="nonSelectedColumn"><a href="states/wy.html">Wyoming</a></td><td class="nonSelectedColumn">53</td><td class="nonSelectedColumn">14</td><td class="nonSelectedColumn">17</td><td class="nonSelectedColumn">14</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(247, 148, 29); color: black;">35</td><td class="nonSelectedColumn"><a href="states/de.html">Delaware</a></td><td class="nonSelectedColumn">52</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">21</td><td class="nonSelectedColumn">16</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(247, 148, 29); color: black;">36</td><td class="nonSelectedColumn"><a href="states/nm.html">New Mexico</a></td><td class="nonSelectedColumn">51</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">21</td><td class="nonSelectedColumn">15</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(247, 148, 29); color: black;">37-t</td><td class="nonSelectedColumn"><a href="states/co.html">Colorado</a></td><td class="nonSelectedColumn">50</td><td class="nonSelectedColumn">6</td><td class="nonSelectedColumn">24</td><td class="nonSelectedColumn">8</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(247, 148, 29); color: black;">37-t</td><td class="nonSelectedColumn"><a href="states/ct.html">Connecticut</a></td><td class="nonSelectedColumn">50</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">23</td><td class="nonSelectedColumn">14</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(247, 148, 29); color: black;">37-t</td><td class="nonSelectedColumn"><a href="states/me.html">Maine</a></td><td class="nonSelectedColumn">50</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">23</td><td class="nonSelectedColumn">15</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(247, 148, 29); color: black;">37-t</td><td class="nonSelectedColumn"><a href="states/nd.html">North Dakota</a></td><td class="nonSelectedColumn">50</td><td class="nonSelectedColumn">16</td><td class="nonSelectedColumn">9</td><td class="nonSelectedColumn">12</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(196, 22, 28); color: white;">42-t</td><td class="nonSelectedColumn"><a href="states/mn.html">Minnesota</a></td><td class="nonSelectedColumn">45</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">19</td><td class="nonSelectedColumn">17</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(196, 22, 28); color: white;">42-t</td><td class="nonSelectedColumn"><a href="states/nj.html">New Jersey</a></td><td class="nonSelectedColumn">45</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">10</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(196, 22, 28); color: white;">42-t</td><td class="nonSelectedColumn"><a href="states/ny.html">New York</a></td><td class="nonSelectedColumn">45</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">19</td><td class="nonSelectedColumn">11</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(196, 22, 28); color: white;">45</td><td class="nonSelectedColumn"><a href="states/ma.html">Massachusetts</a></td><td class="nonSelectedColumn">44</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">16</td><td class="nonSelectedColumn">12</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(196, 22, 28); color: white;">46</td><td class="nonSelectedColumn"><a href="states/wa.html">Washington</a></td><td class="nonSelectedColumn">40</td><td class="nonSelectedColumn">7</td><td class="nonSelectedColumn">24</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(196, 22, 28); color: white;">47-t</td><td class="nonSelectedColumn"><a href="states/or.html">Oregon</a></td><td class="nonSelectedColumn">38</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">21</td><td class="nonSelectedColumn">7</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">1</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(196, 22, 28); color: white;">47-t</td><td class="nonSelectedColumn"><a href="states/vt.html">Vermont</a></td><td class="nonSelectedColumn">38</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">21</td><td class="nonSelectedColumn">11</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(196, 22, 28); color: white;">49</td><td class="nonSelectedColumn"><a href="states/ca.html">California</a></td><td class="nonSelectedColumn">30</td><td class="nonSelectedColumn">4</td><td class="nonSelectedColumn">18</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(196, 22, 28); color: white;">50</td><td class="nonSelectedColumn"><a href="states/nv.html">Nevada</a></td><td class="nonSelectedColumn">28</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">15</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(196, 22, 28); color: white;">51</td><td class="nonSelectedColumn"><a href="states/hi.html">Hawaii</a></td><td class="nonSelectedColumn">27</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">13</td><td class="nonSelectedColumn">7</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+  <tr><td class="selectedColumn" style="background-color: rgb(196, 22, 28); color: white;">41</td><td class="nonSelectedColumn"><a href="states/il.html">Illinois</a></td><td class="nonSelectedColumn">47</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">22</td><td class="nonSelectedColumn">12</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">3</td><td class="nonSelectedColumn">2</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">0</td><td class="nonSelectedColumn">1</td><td class="nonSelectedColumn">0</td></tr>
+')
+
+the_code |>
+  html_elements("tr") |>
+  html_text2() |>
+  str_replace_all("\\t", ", ") |>
+  as_tibble() |>
+  separate(
+    value,
+    into = c(
+      "fraud_rank",
+      "state",
+      "fraud_score",
+      "voter_id",
+      "voter_reg",
+      "absentee_man",
+      "vote_harvesting",
+      "election_obs",
+      "citizen_verify",
+      "voter_asst_id",
+      "vote_counting",
+      "litigation",
+      "same_day_reg",
+      "auto_reg",
+      "private_funding",
+      "audits",
+      "rank_choice"
+    ),
+    sep = ", "
+  ) |>
+  mutate(
+    across(fraud_score:rank_choice, as.numeric),
+    fraud_rank = 52 - rank(fraud_score, ties.method = "max")
+  ) -> score_data
+
+## Clean up the data for students
+
+Data |>
+  group_by(state) |>
+  count() -> fraud_counts
+
+full_join(
+  fraud_counts,
+  score_data |> select(state, fraud_rank, fraud_score)
+) |>
+  mutate(
+    cum_fraud_82_to_24 = replace_na(n, 0)
+  ) |>
+  select(-n) -> fraud_data
+
+## okay let's bring in election returns for 2020 and 2016 by state
+read_csv(
+  here::here(
+    "_data",
+    "mit_countypres_2000-2020.csv"
+  )
+) -> elec_data
+
+elec_data |>
+  filter(year >= 2016) |>
+  group_by(year, state, state_po, party) |>
+  summarize(
+    votes = sum(candidatevotes, na.rm = T)
+  ) |>
+  ungroup() |>
+  pivot_wider(
+    values_from = votes,
+    names_from = party
+  ) |>
+  transmute(
+    year, state, state_po,
+    dem = DEMOCRAT,
+    rep = REPUBLICAN,
+    other = rowSums(
+      cbind(DEMOCRAT, OTHER, REPUBLICAN, GREEN, LIBERTARIAN),
+      na.rm = T
+    ) - rep - dem,
+    total = other + rep + dem
+  ) |>
+  pivot_wider(
+    values_from = c(dem, rep, total, other),
+    names_from = year
+  ) -> clean_elec_data
+
+## merge data for MA1
+full_join(
+  clean_elec_data |> mutate(state = str_to_lower(state)),
+  fraud_data |> mutate(state = str_to_lower(state)),
+  by = "state"
+) -> ma1_data
+
+## Save the datasets
+write_csv(
+  Data,
+  here::here("_data", "heritage_fraud_data.csv")
+)
+write_csv(
+  fraud_counts,
+  here::here("_data", "heritage_fraud_scores.csv")
+)
+write_csv(
+  clean_elec_data,
+  here::here("_data", "mit_pres_returns_2016-2020.csv")
+)
+write_csv(
+  ma1_data,
+  here::here("_data", "ma1_data.csv")
+)
+
+rm(list = ls())
