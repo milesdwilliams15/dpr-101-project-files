@@ -21,7 +21,7 @@ add_opportunity <- function(data) {
   ddy |>
     group_by(ccode1, year) |>
     summarize(
-      relevance = mean(relevance, na.rm = T),
+      opportunity = mean(opportunity, na.rm = T),
       .groups = "drop"
     ) |>
     rename(
