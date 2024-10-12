@@ -12,8 +12,9 @@ add_opportunity <- function(data) {
   
   ddy |>
     mutate(
-      contig = ifelse(conttype < 5, 1, 0),
+      contig = ifelse(conttype >= 1, 1, 0),
       majdyad = pmax(cowmaj1, cowmaj2),
+      prd = ifelse(contig == 1 | majdyad == 1, 1, 0),
       opportunity = logit(
         4.801 + 4.50*contig - 1.051*log(capdist) + 2.901*majdyad)
     ) -> ddy
@@ -21,6 +22,7 @@ add_opportunity <- function(data) {
   ddy |>
     group_by(ccode1, year) |>
     summarize(
+      prd = mean(prd, na.rm = T),
       opportunity = mean(opportunity, na.rm = T),
       .groups = "drop"
     ) |>
