@@ -1,0 +1,27 @@
+---
+title: "Graph Challenge 6"
+author: "Your Name Here"
+date: "`r Sys.Date()`"
+format: 
+  docx:
+    reference-doc: ../quarto_template.docx
+    number-sections: true
+    number-depth: 3
+    fig-dpi: 500
+    fig-align: center
+    fig-height: 4
+    fig-width: 6
+execute: 
+  echo: true
+  warning: false
+  message: false
+---
+
+For this graph challenge, apply a custom palette set with `set_palette()` from `{coolorrr}` in a data visualization. The specifics are up to you, but the graph must show something related to conflict, either over time, or how it's correlated with some other factor in a dataset that you've constructed using `{peacesciencer}`. If you get stuck, instead of coming up with something new, you can take code from a previous graph challenge submission and update it with a custom palette.
+
+```{r}
+## your code here
+```
+
+
+

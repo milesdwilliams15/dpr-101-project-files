@@ -1,0 +1,21 @@
+---
+title: "Graph Challenge 5"
+author: "Your Name Here"
+date: "`r Sys.Date()`"
+format: 
+  docx:
+    reference-doc: ../quarto_template.docx
+    number-sections: true
+    number-depth: 3
+    fig-dpi: 500
+    fig-align: center
+    fig-height: 4
+    fig-width: 6
+execute: 
+  echo: true
+  warning: false
+  message: false
+---
+
+The long peace theory generally holds that conflict is less likely now than in the past, but it argues this is true especially for major powers. Create a plot that shows the rate of conflict initiation over time among non-major powers versus major powers to see if this is the case. Use `{peacesciencer}` to create a state-year dataset and then populate it with the variables you need using `add_cow_majors()` and `add_mid_opportunity()` (remember that this is a custom function I made, so check the lecture notes to see how to use it). Use `{geomtextpath}` in some way to help compare trends in a single graph.
+
