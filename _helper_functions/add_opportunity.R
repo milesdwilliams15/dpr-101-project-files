@@ -19,20 +19,24 @@ add_opportunity <- function(data) {
         4.801 + 4.50*contig - 1.051*log(capdist) + 2.901*majdyad)
     ) -> ddy
   
-  ddy |>
-    group_by(ccode1, year) |>
-    summarize(
-      prd = sum(prd, na.rm = T),
-      opportunity = sum(opportunity, na.rm = T),
-      .groups = "drop"
-    ) |>
-    rename(
-      ccode = ccode1
-    ) -> cy
-  
-  left_join(
-    data, cy, by = c("ccode", "year")
-  )
+  if(any(colnames(data) == "ccode")) {
+    ddy |>
+      group_by(ccode1, year) |>
+      summarize(
+        prd = sum(prd, na.rm = T),
+        opportunity = sum(opportunity, na.rm = T),
+        .groups = "drop"
+      ) |>
+      rename(
+        ccode = ccode1
+      ) -> cy
+    
+    left_join(
+      data, cy, by = c("ccode", "year")
+    )
+  } else {
+    left_join(data, ddy, by = c("ccode1", "ccode2", "year"))
+  }
 }
 
 
