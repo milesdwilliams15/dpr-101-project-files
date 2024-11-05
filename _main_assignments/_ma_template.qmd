@@ -1,0 +1,43 @@
+---
+title: "Main Assignment"
+author: "Your Name Here"
+date: "Date: `r Sys.Date()`"
+format: 
+  docx:
+    reference-doc: ../quarto_template.docx
+    number-sections: true
+    number-depth: 3
+    fig-dpi: 500
+    fig-align: center
+    fig-height: 4
+    fig-width: 6
+execute: 
+  echo: false
+  warning: false
+  message: false
+---
+
+## Introduction
+
+<!-- This is your template .qmd file for your main assignments. In this section you'll state your research question and summarize why it matters. -->
+
+## Data and Design
+
+<!-- In this section you'll describe the data and variables you'll use in your analysis. You'll also summarize how you will use them. -->
+
+## Analysis
+
+<!-- Report your data visualizations and summarize the results. -->
+
+## Conclusion
+
+<!-- Summarize the implications of what you found in the data. Think big! -->
+
+\newpage
+
+## Code Appendix
+
+<!-- Don't touch this! This lets me see your code at the end of the rendered document. -->
+
+```{r ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
+```

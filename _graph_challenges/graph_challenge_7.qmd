@@ -1,0 +1,22 @@
+---
+title: "Graph Challenge 7"
+author: "Your Name Here"
+date: "`r Sys.Date()`"
+format: 
+  docx:
+    reference-doc: ../quarto_template.docx
+    number-sections: true
+    number-depth: 3
+    fig-dpi: 500
+    fig-align: center
+    fig-height: 4
+    fig-width: 6
+execute: 
+  echo: true
+  warning: false
+  message: false
+---
+
+Use the WTHH data to show the average of racial animus (`racial_resentment_scaled`) by partisan lean (`pid7`). Your estimate of the average of racial animus should be weighted using the WTHH survey weights (`weight_DFP`). Use examples from the lecture notes as a guide for how you might show the data.
+
+
