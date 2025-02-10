@@ -1,10 +1,10 @@
 ---
 title: "Main Assignment"
 author: "Your Name Here"
-date: "Date: `r Sys.Date()`"
+date: "`r Sys.Date()`"
 format: 
   docx:
-    reference-doc: ../quarto_template.docx
+    #reference-doc: ../quarto_template.docx
     number-sections: true
     number-depth: 3
     fig-dpi: 500

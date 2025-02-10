@@ -135,22 +135,26 @@ florida |>
         "Desoto",
         "De Soto"
       ),
-    dem_96 = Clinton96,
-    rep_96 = Dole96,
-    lib_96 = Perot96,
-    dem_00 = Gore00,
-    rep_00 = Bush00,
-    lib_00 = Buchanan00,
+    Clinton96,
+    Dole96,
+    Perot96,
+    Gore00,
+    Bush00,
+    Buchanan00,
     across(
-      dem_96:lib_96,
-      ~ .x / (dem_96 + rep_96 + lib_96),
-      .names = "p{.col}"
+      Clinton96:Perot96,
+      ~ .x / (Clinton96 + Dole96 + Perot96),
+      .names = "prop_{.col}"
     ),
     across(
-      dem_00:lib_00,
-      ~ .x / (dem_00 + rep_00 + lib_00),
-      .names = "p{.col}"
-    )
+      Gore00:Buchanan00,
+      ~ .x / (Gore00 + Bush00 + Buchanan00),
+      .names = "prop_{.col}"
+    ),
+    count_residual = lm(Buchanan00 ~ Perot96) |>
+      resid() |> abs(),
+    prop_residual = lm(prop_Buchanan00 ~ prop_Perot96) |>
+      resid() |> abs()
   ) |>
   write_csv(
   here::here(
