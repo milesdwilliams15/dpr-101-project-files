@@ -127,13 +127,13 @@ florida |>
         " ",
         ""
       ) |>
-      str_replace(
-        "St. ",
-        "St "
-      ) |>
+      # str_replace(
+      #   "St. ",
+      #   "St "
+      # ) |>
       str_replace(
         "Desoto",
-        "De Soto"
+        "DeSoto"
       ),
     Clinton96,
     Dole96,
