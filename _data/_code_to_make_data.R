@@ -156,12 +156,16 @@ florida |>
     prop_residual = lm(prop_Buchanan00 ~ prop_Perot96) |>
       resid() |> abs()
   ) |>
+  mutate(
+    county = paste(county, "County")
+  ) |>
   write_csv(
   here::here(
     "_data",
     "florida.csv"
   )
 )
+
 map_data("county") |>
   filter(region == "florida") |>
   mutate(
