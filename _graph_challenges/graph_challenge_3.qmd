@@ -4,7 +4,6 @@ author: "Your Name"
 date: "`r Sys.Date()`"
 format: 
   docx:
-    reference-doc: ../quarto_template.docx
     number-sections: true
     number-depth: 3
     fig-dpi: 500
@@ -17,88 +16,11 @@ execute:
   message: false
 ---
 
-**Instructions**: For this graph challenge, use the `florida.csv` and `florida_map.csv` datasets to create a map of Florida counties that shows the absolute difference in the received versus expected vote *count* for Reform candidate for US president, Pat Buchanan, in 2000 given vote totals for Ross Perot in 1996. The columns `lib_00` and `lib_96` give you these totals, respectively.
+**Instructions**: Read in the dataset located at this url:
 
-Next, create a similar map, but this time show the absolute difference in the received versus expected vote share received by Buchanan in 2000 given Perot's vote share in 1996. The columns `plib_00` and `plib_96` give you these totals, repsectively.
+https://raw.githubusercontent.com/milesdwilliams15/dpr-101-project-files/refs/heads/main/_data/florida.csv
 
-I've written parts of the code for you, but you'll need to complete the rest of it.
+The data provides county-level detail for the state of Florida on candidate vote totals and vote shares in the 1996 and 2000 U.S. presidential elections. Totals are just a count of the total ballots cast for a candidate in a county. Shares are a candidate's count divided by all votes cast for president in a given county. There also are two columns, one called `count_residual` and another called `prop_residual`, that indicate the absolute prediction error from a linear model of Pat Buchanan's vote total and vote share, respectively, in 2000 based on Ross Perot's vote total or share in 1996. Essentially, bigger values in these columns mean that Buchanan's election performance was more unusual given how well Ross Perot did in 1996.
 
-Once you've made these figures, provide a short written response to the following questions: (1) ***Why does looking at the total count of the third party vote alter our conclusions about whether Palm Beach is an outlier in the 2000 US Presidential election as compared to looking at the third party vote share of the total vote;*** and (2) ***which way of presenting the data provides a more accurate picture of Palm Beach relative to other counties?***
-
-```{r}
-## Open the tidyverse:
-library(tidyverse)
-
-## Read in the data:
-fl <- read_csv( )
-fl_map <- read_csv( )
-
-## Write the code to merge the fl and fl_map data:
-
-
-## Function to get absolute residual difference:
-my_fun <- function(x1, x2) {
-  lm(x1 ~ x2) |> resid() |> abs()
-}
-
-## Function to return the county that's the biggest outlier:
-biggest_ol <- function(data, x1, x2) {
-  data |>
-    mutate(x = my_fun(!!enquo(x1), !!enquo(x2))) |>
-    filter(x == max(x)) |>
-    pull(county) |>
-    unique()
-}
-```
-
-```{r}
-## Get the biggest outlier county:
-biggest_ol(
-  fl, lib_00, lib_96
-) -> outlier
-
-## Make the first map of Florida:
-ggplot(fl_map) +
-  aes(
-    x = , # what goes here?
-    y = , # what goes here?
-    fill = my_fun(lib_00, lib_96),
-    group = # do we need to group by something?
-  ) +
-  geom_polygon(
-    color = "black",
-    size = 0.01
-  ) +
-  geom_polygon( # this makes the outlier stand out
-    data = . %>% filter(county == outlier),
-    color = "black",
-    size = 1,
-    alpha = 0
-  ) +
-  theme_void() +
-  scale_fill_gradient( # this updates the color gradient
-    low = "white", 
-    high = "steelblue",
-    labels = scales::comma
-  ) +
-  labs(
-    title = paste0(
-      outlier,
-      " was the biggest outlier in 2000 by vote count"
-    ),
-    fill = "Prediction Error:"
-  )
-```
-
-```{r}
-## Write code to compute the difference between
-## the observed and expected vote share by county:
-
-
-## Write your code to make the second map here:
-
-```
-
-
-**Your answer**:
+Use this data to create a county-level map of Florida showing the absolute error in Buchanan's vote total, and another map showing the absolute error in Buchanan's vote share. Palm Beach County should stand out as the biggest outlier when looking at vote totals, but does it still stand out when looking at vote shares? If not, which county does? After you make your maps, answer these questions and, if the biggest outlier is different, speculate about why this might be the case in a short summary.
 
