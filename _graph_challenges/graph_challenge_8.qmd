@@ -4,7 +4,6 @@ author: "Your Name"
 date: "`r Sys.Date()`"
 format: 
   docx:
-    reference-doc: ../quarto_template.docx
     number-sections: true
     number-depth: 3
     fig-dpi: 500
@@ -20,5 +19,7 @@ execute:
 
 A good way to test whether an index is useful is to see if it predicts other behaviors in ways that align with expectations. One of the narratives that arose during the 2016 US Presidential election was the idea that support for Trump was driven by racial animus/resentment. If this is true, we might then expect that people who supported the Republican Party in 2016 scored higher on average in the racial animus index in the WTHH survey data. 
 
-There's a variable called `suprpty` that we can cross reference mean racial animus scores with to test this claim. Use the WTHH data (link to data and codebook is in the lecture notes) to show the average racial animus of individuals broken down by which party they support (`suprpty`). After you make your data visualization write a short summary of what you see in the data and discuss what the data tells us about the link between racial animus and party support.
+There's a variable called `suprpty` that we can cross reference mean racial animus scores with to test this claim. Use the WTHH data (link to data and codebook is in the lecture notes) to show the average racial animus of individuals broken down by which party they support (`suprpty`). After you make your data visualization write a short summary of what you see in the data and discuss what the data tells us about the link between racial animus and party support. 
+
+It's up to you how you visualize the data. Make smart choices as you make your graph.
 

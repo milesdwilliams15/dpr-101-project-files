@@ -4,7 +4,6 @@ author: "Your Name Here"
 date: "`r Sys.Date()`"
 format: 
   docx:
-    #reference-doc: ../quarto_template.docx
     number-sections: true
     number-depth: 3
     fig-dpi: 500

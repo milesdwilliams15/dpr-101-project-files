@@ -4,7 +4,6 @@ author: "Your Name Here"
 date: "`r Sys.Date()`"
 format: 
   docx:
-    reference-doc: ../quarto_template.docx
     number-sections: true
     number-depth: 3
     fig-dpi: 500
@@ -17,11 +16,12 @@ execute:
   message: false
 ---
 
-For this graph challenge, apply a custom palette set with `set_palette()` from `{coolorrr}` in a data visualization. The specifics are up to you, but the graph must show something related to conflict, either over time, or how it's correlated with some other factor in a dataset that you've constructed using `{peacesciencer}`. If you get stuck, instead of coming up with something new, you can take code from a previous graph challenge submission and update it with a custom palette.
+For this graph challenge, I want you to produce four data visualizations that showcase one of the four types of color palettes we discussed in class:
 
-```{r}
-## your code here
-```
+1. Qualitative - maps colors to a discrete unordered set of categories.
+2. Sequential - maps colors to either an ordered discrete category or numerical variable.
+3. Diverging - maps colors to either an ordered discrete category or numerical variable that is centered around a reference category or value.
+4. Binary - maps colors to a binary discrete category.
 
-
+It is up to you what your data visualizations will be, but they must be relevant to international conflict. You should use the `{coolorrr}` package functions to update your color palettes.
 

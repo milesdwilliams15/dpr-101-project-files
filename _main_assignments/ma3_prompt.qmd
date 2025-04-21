@@ -1,0 +1,68 @@
+---
+format: 
+  docx:
+    reference-doc: ../quarto_template.docx
+    number-sections: false
+    number-depth: 3
+    fig-dpi: 500
+    fig-align: center
+    fig-height: 4
+    fig-width: 6
+execute: 
+  echo: false
+  warning: false
+  message: false
+title: Main Assignment 3
+---
+
+## Introduction
+
+Political parties like policy, but they love power more. That means parties often have some flexibility about what issues they prioritize in their quest for controlling institutions. But to do this well, parties need to know what people think and feel so they know what issues to emphasize, which positions to take, and which issues to ignore.
+
+In this main assignment you'll work in teams and imagine that you've been hired to consult for one of the two main US political parties (you choose Democrats or Republicans) to identify the fault lines within their party on three dimensions.
+
+1. What is the demographic breakdown of the party in terms of education, income, gender, and race? 
+
+2. On what issues are they united and on which are they divided? 
+
+3. How are they united or divided in their feelings toward minority and underserved groups?
+
+To answer these questions you'll use the “[What The Hell Happened?](https://wthh.dataforprogress.org/)” survey data collected by Data for Progress (DFP). Your write-up will follow the same outline as the previous assignments: 
+
+1. **Introduction**: In one paragraph, clearly address party leaders, state the questions you will address, and talk about why it matters to the party.
+
+2. **Data and Design**: In two paragraphs, describe the data you will use in your analysis and how you will use it. This section should indicate where the survey data came from, how many people are in the data, and which sets of variables you'll look at to answer the questions the party is asking. Don't just list the variables out and don't use their raw names from the dataset. Talk in plain text. How would you summarize the data for actual party elites?
+
+3. **Analysis**: In this section you'll include your data visualizations and your text walking party leaders through them. *You should summarize each data visualization you make in a paragraph that appears before the graph itself.* Don't just start your paragraph by saying "Figure 1 shows..." Instead, be more creative and try to tell a story with the data. Your analysis should include three data visualizations in total summarizing (1) the demographic breakdown of the party by gender, race, income, and education; (2) preferences with respect to 10 issues; and (3) levels of racism, sexism, and xenophobia. For the three measures in part 3 you'll follow the instructions provided by Data for Progress to construct an index for each concept. When you make summaries, you should use the weights included in the survey data to ensure that you're making good inferences to the broader American electorate. You should also make sure that any numerical codes for variables that refer to qualitative categories are updated accordingly. That is, you should use the codebook to recode the data! 
+
+4. **Conclusion**: Wrap up your submission with one or two paragraphs that discuss the implications of your findings. Don't just summarize your findings. Think big and make potentially bold claims about what your findings mean for your audience and society.
+
+
+Other rules:
+
+* I would prefer it if you use the `_ma_template.qmd` file to format a Quarto document that you then render to a .docx file for your submission. The template file that I have given you is set up to report your code at the end of your rendered document so that I can see it. If you don't use it, you should submit your code to me as a separate file, or by copying it to the end of your document.
+
+* If you cite external sources, you should cite them by hyperlinking your text. You don't need to include a formal "References" or "Works Cited" section.
+
+* Make sure your submission includes your names and a title.
+
+* You should title your data visualizations using a convention like "Figure 1: Helpful summary." Do not use unnecessary designations like "Figure 1a" or "Figure 1b" if you have related figures. They might be related, but they are separate and deserve their own unique number.
+
+\newpage
+
+## Details about the data
+
+To access the data for this assignment, simply run the following code:
+
+```{r}
+#| echo: true
+#| eval: false
+library(tidyverse)
+wthh <- read_csv(
+  "http://filesforprogress.org/datasets/wthh/DFP_WTHH_release.csv"
+)
+```
+
+You'll need to use the codebook for the WTHH data to clean up variables for analysis: [WTHH codebook](https://www.filesforprogress.org/datasets/wthh/WTHH_Core_and_DFP_modules.pdf).
+
+To get more background on the dataset and how it was collected, you can read the summary of it on Data for Progress's website: [Get the Data](https://wthh.dataforprogress.org/get-the-data).

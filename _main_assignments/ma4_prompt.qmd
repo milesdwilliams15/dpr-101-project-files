@@ -1,0 +1,60 @@
+---
+title: "MA4 Instructions"
+format: 
+  docx:
+    reference-doc: ../quarto_template.docx
+    number-sections: true
+    number-depth: 3
+    fig-dpi: 500
+    fig-align: center
+    fig-height: 4
+    fig-width: 6
+execute: 
+  echo: true
+  warning: false
+  message: false
+---
+
+In this final assignment, imagine that you are writing a post for Denison’s [one twenty seven](https://onetwentyseven.blog/) blog. That is, imagine you’re writing to your fellow students. This MA may be completed individually, or you may self-select into groups of up to three. It's up to you.
+
+In this final assignment, you will pose your own research question related to a variable (a behavior, opinion, perception, or demographic variable) of your choice in the October 2024 DU survey. Once you’ve picked your variable of interest, you have **two options**.
+
+-   ***Option A***: Explain variation in your variable of interest using demographic or other attitudinal variables in the data (e.g. how do variables W, X, and Z predict Y?).
+
+-   ***Option B***: Explain variation in other attitudes given your variable of interest (e.g. how does X predict variation in W, X, and Y?).
+
+If you choose Option A, a demographic variable may NOT be your variable of interest. If you choose Option B, a demographic variable may NOT be one of your variables to be explained.
+
+The reasoning in both cases is simple. It doesn't make sense to treat demographic characteristics as factors to be explained by attitudes or behaviors. For example, party ID does not determine someone's race. However, race can possibly explain someone's party ID.
+
+Your final paper will need a figure that summarizes the distribution of the key variable of interest. It should then feature at least 3 additional figures attempting to explain that key variable or attempting to show how your variable of interest explains other variables in the data. The goal is to tell a relatively complete story about the variable of interest.
+
+Like all past projects, your write-up will include an Introduction that includes your research question (make this your very first sentence and make it in the form of a question). It will then include a Data & Design section where you will describe the data, your key variable of interest and the variables you’ll use to explain it or that it will explain, and the kinds of data visualizations you’ll use. You’ll next have your analysis section where you will include your figures. As with past assignments, you should label your figures as “Figure X: Description” and so on, and your text describing your figure should come before the figure. Make sure as you describe your figures that you motivate them before you jump into describing them! You’ll finish up with a Conclusion that restates your research question, summarizes what you found, and that contains some bigger thoughts and takeaways.
+
+This project will have a few key checkpoints along the way to help you make progress and to allow you to share your work with your fellow classmates along the way.
+
+-   Wednesday 12.04: you’ll pitch your project in class.
+
+-   Following week: project presentations.
+
+-   Final submissions will be due on our final exam date and time. That's Sunday 12.15 by 11:00 am for section 1 (9:30 class) and Sunday 12.15 by 4:00 pm for section 2 (10:30 class).
+
+This project gives you even more free rein than past ones to choose your own research question and create whatever data viz you want to tell a story with data. With that free rein comes more responsibility on your part, and that added responsibility in turn means this project will take you more time.
+
+Here's code to read in the data. Here's the dataset's url on Google Drive: https://docs.google.com/spreadsheets/d/1nNkg14Bb9JG22jzIfjqEWuPf7ejzi_ELEvrUsNMNm6Q/edit?usp=sharing
+
+```{r}
+#| eval: false
+
+library(tidyverse)
+library(googlesheets4)
+gs4_deauth()
+range_speedread(
+  "put url here"
+) -> dt
+
+```
+
+And this is the link to the codebook: [October 2024 DU Survey Codebook](https://drive.google.com/file/d/1iBQhQgVrHbjV5U_DWY7Ac-hGvt9DQFOG/view?usp=sharing)
+
+You're using ***survey data*** in this assignment, which means all the same rules apply that we discussed in the previous unit. Use the codebook to map how question responses correspond to numerical codes in the raw data, and make sure you appropriately re-code the data prior to data visualization.

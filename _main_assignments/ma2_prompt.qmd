@@ -1,0 +1,51 @@
+---
+format: 
+  docx:
+    reference-doc: ../quarto_template.docx
+    number-sections: true
+    number-depth: 3
+    fig-dpi: 500
+    fig-align: center
+    fig-height: 4
+    fig-width: 6
+execute: 
+  echo: false
+  warning: false
+  message: false
+---
+
+## MA2 Instructions
+
+As we've discussed in class, the *long peace* is the idea that the world is becoming less warlike, both in terms of war's frequency, and in terms of its deadliness. Despite being straightforward in its claims, the task of confirming the long peace (or descernable trends in war generally) is tricky. There are many data questions that don't have obvious, objectively true answers. Should we measure wars started over time by total counts or should we adjust, somehow, for the likelihood that countries can fight each other in the first place? And should we measure conflict size by total deaths per conflict or should we adjust for population size?
+
+For this main assignment, I've given you a dataset that lets you chart your own path in adjudicating these issues. Your mission is to see if you can find evidence of the long peace in the data. You'll do so by producing two data visualizations. The first will show the trend in the frequency/rate of conflicts over time, comparing *two or more* alternative ways of quantifying the frequency/rate. The second will show the trend in the size of conflicts by total battle deaths, again comparing *two or more* alternative ways of quantifying size. Be creative and draw on the skills you've learned so far in the class to make the best possible data visualizations you can. 
+
+I also have some requirements for how you structure your submission. You must adhere to the following outline:
+
+1. **Introduction**: In *one* paragraph, clearly state the question/problem you will address, and talk about why it matters.
+2. **Data and Design**: In two paragraphs, describe the data you will use in your analysis and how you will use it. In describing the data you should mention: a) *what the unit of analysis is (e.g., "I use a year-level dataset...")*; b) *a brief summary of the variables you'll use (e.g., "Our data is populated with incidents of international conflict and battle deaths")*; and c) *a quick statement about where the variables in the data came from (e.g., "Conflict data comes from the Militarized Interstate Events (MIEs) dataset produced by the International Conflict Data Project (ICDP).").* To describe how you'll use the data, you might say something like: "To test the long peace, I will examine conflict frequency as well as rate per politically relevant country-pairs, and I will look at conflict intensity by total battle deaths as well as deaths per capita."
+3. **Analysis**: In this section you'll include your data visualizations and your text walking your audience through them. *You should summarize each data visualization you make in a paragraph that appears before the graph itself.* Don't just start your paragraph by saying "Figure 1 shows..." Instead, be more creative and try to tell a story with the data. Also, your analysis should consist entirely of data visualizations. *Do NOT report raw R output, data tables, the results from statistical analysis like correlations or regression models, etc.* I will dock points on your submission if you do this. This is a class on data visualization, and this assignment is about honing your ability to make good data visualizations and then use them to drive a story you want to tell with data. Statistics and models aren't bad, but this is not the place for them. Also, you should only include *two* data visualizations.
+4. **Conclusion**: Wrap up your submission with one or two paragraphs that discuss the implications of your findings. Don't just summarize your findings. Think big and make potentially bold claims about what your findings mean for your audience and society.
+
+
+Other rules:
+
+* I would prefer it if you use the `_ma_template.qmd` file to format a Quarto document that you then render to a .docx file for your submission. The template file that I have given you is set up to report your code at the end of your rendered document so that I can see it.
+* If you cite external sources, you should cite them by hyperlinking your text. You don't need to include a formal "References" or "Works Cited" section.
+* Make sure your submission includes your name and a title.
+* You should title your data visualizations using a convention like "Figure 1: Helpful summary." Do not use unnecessary designations like "Figure 1a" or "Figure 1b" if you have related figures. They might be related, but they are separate and deserve their own unique number.
+
+\newpage
+
+## Details about the data
+
+To access the data for this assignment, simply run the following code:
+
+```{r}
+#| echo: true
+library(tidyverse)
+data_loc <- here::here("_data", "mie-1.0.csv")
+ma2_data <- read_csv(data_loc)
+```
+
+You can read more about the data by checking its codebook online: [MIE codebook](https://internationalconflict.ua.edu/wp-content/uploads/2023/07/MIEcodebook.pdf)

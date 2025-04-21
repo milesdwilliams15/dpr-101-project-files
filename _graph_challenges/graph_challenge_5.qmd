@@ -4,7 +4,6 @@ author: "Your Name Here"
 date: "`r Sys.Date()`"
 format: 
   docx:
-    reference-doc: ../quarto_template.docx
     number-sections: true
     number-depth: 3
     fig-dpi: 500
@@ -17,5 +16,14 @@ execute:
   message: false
 ---
 
-The long peace theory generally holds that conflict is less likely now than in the past, but it argues this is true especially for major powers. Create a plot that shows the rate of conflict initiation over time among non-major powers versus major powers to see if this is the case. Use `{peacesciencer}` to create a state-year dataset and then populate it with the variables you need using `add_cow_majors()` and `add_mid_opportunity()` (remember that this is a custom function I made, so check the lecture notes to see how to use it). Use `{geomtextpath}` in some way to help compare trends in a single graph.
+For this graph challenge your mission is to see if you can replicate the data visualization that I posted on this assignment's prompt in Canvas. Below I've given you the code you need to read in the data, but that's all. This dataset comes directly from the Correlates of War Project, and it provides country level detail on different participants in all-out wars over time. There are 95 wars in total in the dataset.
+
+I'll also give you a hint. To add the war labels with lines connecting them I used the `{ggrepel}` package. You can install it by writing `install.packages("ggrepel")` in the R console. Good luck!
+
+```{r}
+## read in the data
+library(tidyverse)
+url <- "https://raw.githubusercontent.com/milesdwilliams15/Teaching/refs/heads/main/DPR%20101/Data/Inter-StateWarData_v4.0.csv"
+wars <- read_csv(url)
+```
 
