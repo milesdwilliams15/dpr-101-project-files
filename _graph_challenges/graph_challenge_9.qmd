@@ -1,0 +1,17 @@
+---
+title: "Graph Challenge 9"
+author: "Your Name"
+date: "`r Sys.Date()`"
+format: html
+execute: 
+  echo: true
+  warning: false
+  message: false
+---
+
+The `{plotly}` package lets you turn your ggplot figures into interactive ones. You can learn more about it here: https://plotly.com/ggplot2/
+
+For this graph challenge, I want you to create an interactive plot with the April 2025 DU survey data using ggplot and plotly. The type of plot is up to you. So is the variable or variables you'd like to show.
+
+When you're done, rather than hitting the "render" button, hit the "publish" button to publish your submission to RPubs. Then, submit the link to your publication on Canvas.
+
