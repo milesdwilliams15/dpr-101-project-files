@@ -1,0 +1,19 @@
+---
+title: "Graph Challenge Rubric"
+format: pdf
+---
+
+Graph challenges are worth 5% each of your final grade. I will grade each according to the following criteria. Each criterion is evaluated simply on whether you met the expectation, and they all carry equal weight.
+
+1.  Were you able to get your code to run and render to a word (.docx) file? (yes/no)
+2.  Did you produce a data visualization? (yes/no)
+3.  Did you produce the kind of data visualization I asked for, or one that was appropriate given the type of data I gave you? (yes/no)
+4.  Does the data visualization have chart junk? (yes/no) **\[A "no" for this one is a good thing\]**
+5.  Did you use the "assertion-evidence" approach for your plot title? (yes/no)
+6.  Did you include appropriate and clear labels for the axes and legends? (yes/no)
+7.  If necessary, did you modify or augment the data in sensible ways prior to making your visualization? (yes/no)
+8.  Did you offer a summary, interpreting what the data visualization shows? (yes/no)
+9.  Is your summary clearly written? (yes/no)
+10. Does your summary demonstrate that you understand what's going on in your data – e.g., correct understanding of variables, what they measure, and how they're related? (yes/no)
+
+Your grade is based on your score out of 10: 10/10 = 100% A+; 9/10 = 90% A-; etc...

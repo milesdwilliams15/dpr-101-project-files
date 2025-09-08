@@ -17,7 +17,7 @@ execute:
 ---
 
 
-**Instructions**: Read in the dataset named `gc1_data.csv` into R from this url: https://raw.githubusercontent.com/milesdwilliams15/dpr-101-project-files/refs/heads/main/_data/gc1_data.csv. It has two variables called `x` and `y`. Use the data to create a scatter plot with `x` on the x-axis and `y` on the y-axis. Below the plot output, in plain text briefly summarize what the data appears to be telling you. When you're done, hit the render button and submit the .docx file this Quarto document produces to Canvas. 
+**Instructions**: Read in the dataset named `gc1_data.csv` into R from this url: https://raw.githubusercontent.com/milesdwilliams15/dpr-101-project-files/refs/heads/main/_data/gc1_data.csv. It has two variables called `x` and `y`. Use the data to create a scatter plot with `x` on the x-axis and `y` on the y-axis. Below the plot output, in plain text briefly summarize what the data "says". When you're done, hit the render button and submit the .docx file this Quarto document produces to Canvas. 
 
 <!-- A code block as been included below. This is where you should write your code to read in the data and produce your data viz. -->
 
