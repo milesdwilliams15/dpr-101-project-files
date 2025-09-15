@@ -16,11 +16,11 @@ execute:
   message: false
 ---
 
-You can use data to tell many different, sometimes conflicting, stories. Below we have some code written by an analyst who claims there was fraud in the 2012 US Presidential Election between then Democratic incumbent Barack Obama and his Republican challenger Mitt Romney. This analyst wanted to challenge the claim population size can explain away the fact that Obama won in 2012 despite losing a majority of counties. To do this, he made a scatter plot of county population on the x-axis and total votes cast for Romney on the y-axis. If you run his code below, you'll see that it shows a positive correlation between county population and total votes for Romney.
+You can use data to tell many different, sometimes conflicting, stories. Below we have some code written by an analyst who claims there was fraud in the 2012 US Presidential Election between then Democratic incumbent Barack Obama and his Republican challenger Mitt Romney. This analyst wanted to challenge the claim that population size can explain away the fact that Obama won in 2012 despite losing a majority of counties. To do this, he made a scatter plot of county population on the x-axis and total votes cast for Romney on the y-axis. If you run his code below, you'll see that it shows a positive correlation between county population and total votes for Romney.
 
-For this graph challenge, your mission is to create a new scatter plot based on the one this analyst created that provides the context we need to show that there's nothing anomalous about this finding in the data. Write your code for the new data viz, and below it write a quick summary of why your data visualization is better.
+For this graph challenge, your mission is to create a new scatter plot using the same dataset to show that there's nothing anomalous about the fact that Romney lost in 2012 despite winning more total votes in more populous counties. You can make this new data viz below the one the analyst made, and then write a short summary explaining why your data visualization is better.
 
-First, open the `{tidyverse}` then read in the data:
+Here's the code the analyst wrote to read in the data:
 
 ```{r}
 ## Open the packages you need
