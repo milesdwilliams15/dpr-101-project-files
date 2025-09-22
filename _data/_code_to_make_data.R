@@ -135,11 +135,6 @@ florida |>
         "Desoto",
         "DeSoto"
       ),
-    palmbeach = ifelse(
-      county == "Palm Beach County",
-      "Palm Beach",
-      "Other Countries"
-    ),
     Clinton96,
     Dole96,
     Perot96,
@@ -158,7 +153,12 @@ florida |>
     )
   ) |>
   mutate(
-    county = paste(county, "County")
+    county = paste(county, "County"),
+    palmbeach = ifelse(
+      county == "Palm Beach County",
+      "Palm Beach",
+      "Other Counties"
+    )
   ) |>
   write_csv(
   here::here(
