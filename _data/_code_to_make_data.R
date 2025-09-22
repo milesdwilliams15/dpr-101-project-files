@@ -135,6 +135,11 @@ florida |>
         "Desoto",
         "DeSoto"
       ),
+    palmbeach = ifelse(
+      county == "Palm Beach County",
+      "Palm Beach",
+      "Other Countries"
+    ),
     Clinton96,
     Dole96,
     Perot96,
@@ -150,11 +155,7 @@ florida |>
       Gore00:Buchanan00,
       ~ .x / (Gore00 + Bush00 + Buchanan00),
       .names = "prop_{.col}"
-    ),
-    count_residual = lm(Buchanan00 ~ Perot96) |>
-      resid() |> abs(),
-    prop_residual = lm(prop_Buchanan00 ~ prop_Perot96) |>
-      resid() |> abs()
+    )
   ) |>
   mutate(
     county = paste(county, "County")
