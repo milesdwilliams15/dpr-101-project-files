@@ -569,18 +569,40 @@ rm(list = ls())
 
 library(tidyverse)
 
-dt <- read_csv(
+d24 <- read_csv(
   "https://raw.githubusercontent.com/tonmcg/US_County_Level_Election_Results_08-24/refs/heads/master/2024_US_County_Level_Presidential_Results.csv"
 )
 
-## I need to clean up county names
+d20 <- read_csv(
+  "https://raw.githubusercontent.com/tonmcg/US_County_Level_Election_Results_08-24/refs/heads/master/2020_US_County_Level_Presidential_Results.csv"
+)
+
+full_join(
+  x = d24 |>
+    transmute(
+      state_name, county_name,
+      rep24 = votes_gop,
+      dem24 = votes_dem,
+      tot24 = total_votes,
+      rep_share24 = rep24 / tot24,
+      dem_share24 = dem24 / tot24,
+      rep_margin24 = rep_share24 - dem_share24
+    ),
+  y = d20 |>
+    transmute(
+      state_name, county_name,
+      rep20 = votes_gop,
+      dem20 = votes_dem,
+      tot20 = total_votes,
+      rep_share20 = rep20 / tot20,
+      dem_share20 = dem20 / tot20,
+      rep_margin20 = rep_share20 - dem_share20
+    )
+) -> dt
 
 dt |>
-  select(-county_fips) |>
   mutate(
-    county_name = county_name |>
-      str_remove_all(" County") |>
-      str_remove_all(" Parish")
+    rep_shift = rep_margin24 - rep_margin20
   ) -> dt
 
 write_csv(
