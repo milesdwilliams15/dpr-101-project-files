@@ -562,3 +562,28 @@ write_csv(
 )
 
 rm(list = ls())
+
+
+
+# county_data_2024 --------------------------------------------------------
+
+library(tidyverse)
+
+dt <- read_csv(
+  "https://raw.githubusercontent.com/tonmcg/US_County_Level_Election_Results_08-24/refs/heads/master/2024_US_County_Level_Presidential_Results.csv"
+)
+
+## I need to clean up county names
+
+dt |>
+  select(-county_fips) |>
+  mutate(
+    county_name = county_name |>
+      str_remove_all(" County") |>
+      str_remove_all(" Parish")
+  ) -> dt
+
+write_csv(
+  dt,
+  here::here("_data", "county_data_2024.csv")
+)
