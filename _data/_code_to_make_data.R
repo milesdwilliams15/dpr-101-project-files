@@ -609,3 +609,25 @@ write_csv(
   dt,
   here::here("_data", "county_data_2024.csv")
 )
+
+# make a version at the state level
+
+dt |>
+  select(-county_name) |>
+  group_by(state_name) |>
+  summarize(
+    across(c(rep20:tot20, rep24:tot24), ~ sum(.x, na.rm = T))
+  ) |>
+  ungroup() |>
+  mutate(
+    rep_share20 = rep20 / tot20,
+    dem_share20 = dem20 / tot20,
+    rep_margin20 = rep_share20 - dem_share20,
+    rep_share24 = rep24 / tot24,
+    dem_share24 = dem24 / tot24,
+    rep_margin24 = rep_share24 - dem_share24,
+    rep_shift = rep_margin24 - rep_margin20
+  ) |>
+  write_csv(
+    here::here("_data", "state_data_2024.csv")
+  )
