@@ -739,10 +739,10 @@ score |>
   arrange(-integrity_score) |>
   mutate(
     integrity_cat = c(rep(
-      c("Ranked 1-10", "Ranked 11-20",
-        "Ranked 21-20", "Ranked 31-40"),
+      c("1. Excellent", "2. Good",
+        "3. Fair", "4. Poor"),
       each = 10
-    ), rep("Ranked 41-51", len = 11))
+    ), rep("5. Terrible", len = 11))
   ) -> score
 
 # county data
