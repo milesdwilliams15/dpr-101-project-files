@@ -20,7 +20,12 @@ execute:
 
 https://raw.githubusercontent.com/milesdwilliams15/dpr-101-project-files/refs/heads/main/_data/florida.csv
 
-The data provides county-level detail for the state of Florida on candidate vote totals and vote shares in the 1996 and 2000 U.S. presidential elections. Totals are just a count of the total ballots cast for a candidate in a county. Shares are a candidate's count divided by all votes cast for president in a given county. There also are two columns, one called `count_residual` and another called `prop_residual`, that indicate the absolute prediction error from a linear model of Pat Buchanan's vote total and vote share, respectively, in 2000 based on Ross Perot's vote total or share in 1996. Essentially, bigger values in these columns mean that Buchanan's election performance was more unusual given how well Ross Perot did in 1996.
+The data provides county-level detail for the state of Florida on candidate vote totals and vote shares in the 1996 and 2000 U.S. presidential elections. Some columns are a count of the total ballots cast for a specific candidate in each county. Others are shares of a candidate's votes out of all votes for president in a given county. If you remember back when we read "The Butterfly Did It," the 2000 election is the one where the butterfly ballot design in Palm Beach County, Florida resulted in thousands of erroneous votes cast for Pat Buchanan.
 
-Use this data to create a county-level map of Florida showing the absolute error in Buchanan's vote total, and another map showing the absolute error in Buchanan's vote share. Palm Beach County should stand out as the biggest outlier when looking at vote totals, but does it still stand out when looking at vote shares? If not, which county does? After you make your maps, answer these questions and, if the biggest outlier is different, speculate about why this might be the case in a short summary.
+Use this data to create *two* data visualizations. Both should be scatter plots that include lines of best fit. Both should also highlight Palm Beach County using different colored data points and a legend. The only thing that should be different between the data visualizations is that one will show Buchanan's vote total in 2000 (Buchanan00) predicted by Ross Perot's (Perot96) in 1996, and the other will show Buchanan's vote share in 2000 (prop_Buchanan00) predicted by Ross Perot's in 1996 (Perot96). After you've made both figures, in a paragraph at the end, answer the following questions: 
 
+1. Does looking at vote shares lead to a different conclusion about Palm Beach County's weirdness? 
+
+2. What might explain why the results look different?
+
+3. Which way is the right way to examine the data: shares or totals?

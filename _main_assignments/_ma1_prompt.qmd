@@ -1,7 +1,8 @@
 ---
+title: MA1 Instructions
 format: 
   docx:
-    number-sections: true
+    number-sections: false
     number-depth: 3
     fig-dpi: 500
     fig-align: center
@@ -13,48 +14,159 @@ execute:
   message: false
 ---
 
-## MA1 Instructions
+Election fraud is a contentious issue in U.S. politics at the moment, and data literacy is key to navigating the claims being made. Can you use data to cut through the noise and show whether fraud played a role in the 2024 election? 
 
-Election fraud is a contentious issue in U.S. politics at the moment. Can you use data to cut through the noise and show whether fraud played a role in the 2020 election? For your first main assignment, you'll answer this question by using a dataset that has state-level (+D.C.) election returns from the 2016 and 2020 U.S. presidential elections, along with measures produced by the conservative think tank, the Heritage Foundation, of instances of confirmed election fraud and measures of state-level election integrity. Your mission is to probe the data to find evidence (or a lack thereof) that states with higher historical frequency of fraud and worse election integrity either show unusual deviations in election returns between 2016 and 2020, or else that fraud and fraud risk tend to occur in states that lean toward one or the other party. *Note that I'm not looking for an answer one way or the other. You look at the data and tell me what your own answer is.*
+For your first main assignment, you'll answer this question by using a dataset that has county-level election returns compiled by the MIT Election Lab from the 2020 and 2024 U.S. presidential elections. It also contains measures produced by the conservative think tank, the Heritage Foundation, of instances of confirmed election fraud and measures of state-level election integrity. Your mission is to probe the data to see if there's evidence that states with higher historical frequency of fraud and worse election integrity show unusual county-level deviations in election returns between 2020 and 2024. *I'm not looking for an answer one way or the other. You look at the data and tell me what you think.*
 
-You'll consider these issues by producing a series of data visualizations. How you choose to look at the data will be largely up to you, but I have a few minimum requirements. First, you must produce at least ***four data visualizations***. Second, ***at least one visualization must be a map of the U.S. (either a true map or a geo-faceted map) that shows the distribution of one variable of your choosing***. 
+To complete this assignment, you'll work in teams, to which I'll assign you randomly on Canvas. Together, you'll produce a series of data visualizations and write up your findings. I have uploaded to Canvas a Quarto template for you to use, but if it is more convenient to collaborate with a Google Document that is fine too. 
 
-I also have some requirements for how you structure your submission. You must adhere to the following outline:
+I except just on submission per team in the form of a polished word document. You have some freedom in how you'll proceed, but below I have some requirements for how you should structure your submission. You must adhere to the following outline, which will also serve as my grading rubric. Each point will be given equal weight. All members of a team will receive the same final grade.
 
-1. **Introduction**: In *one* paragraph, clearly state the question/problem you will address, and talk about why it matters.
-2. **Data and Design**: In two paragraphs, describe the data you will use in your analysis and how you will use it. In describing the data you should mention: a) *what the unit of analysis is (e.g., "We use a statel-level dataset...")*; b) *a brief summary of the variables you'll use (e.g., "Our data is populated with counts of ballots cast for the major parties in the U.S. along with counts of cumulative fraud cases and election integrity scores.")*; and c) *a quick statement about where the variables in the data came from (e.g., "Election outcomes come from the MIT Election Lab, while fraud and election integrity measures come from the Heritage Foundation.").* To describe how you'll use the data, you might say something like: "We plan to cross-reference how the Democratic share of the vote deviates in 2020 from what would be expected given the Democratic vote share in 2016 with a state's level of election integrity."
-3. **Analysis**: In this section you'll include your data visualizations and your text walking your audience through them. *You should summarize each data visualization you make in a paragraph that appears before the graph itself.* Don't just start your paragraph by saying "Figure 1 shows..." Instead, be more creative and try to tell a story with the data. Also, your analysis should consist entirely of data visualizations. *Do NOT report raw R output, data tables, the results from statistical analysis like correlations or regression models, etc.* I will dock points on your submission if you do this. This is a class on data visualization, and this assignment is about honing your ability to make good data visualizations and then to use them to drive a story you want to tell with data. Statistics and models aren't bad, but this is not the place for them.
-4. **Conclusion**: Wrap up your submission with one or two paragraphs that discuss the implications of your findings. Don't just summarize your findings. Think big and make potentially bold claims about what your findings mean for your audience and society.
+## Preamble 
 
+- Include a title for your submission.
 
-Other rules:
+- Include your team member names.
 
-* I would prefer it if you use the `_ma_template.qmd` file to format a Quarto document that you then render to a .docx file for your submission. But I understand that this approach might generate distracting issues and force you to troubleshoot rather than focus on your data viz and your writing. It might also make collaboration with your peers a problem. I'll therefore accept word or pdf documents that you've produced the "old fashioned" way. As long as the formatting is 12pt font and double-spaced, this will be fine.
-* If you cite external sources, you should cite them by hyperlinking your text. You don't need to include a formal "References" or "Works Cited" section.
-* Make sure your submission includes your names and a title.
-* You should title your data visualizations using a convention like "Figure 1: Helpful summary." Do not use unnecessary designations like "Figure 1a" or "Figure 1b" if you have related figures. They might be related, but they are separate and deserve their own unique number.
+## Introduction 
 
-\newpage
+- Include a section header.
+
+- Should be one paragraph.
+
+- Use clear and plain writing with no more than two typos or grammatical errors.
+
+- Clearly state your research question (must end with a question mark).
+
+- Explain why the question matters (context, relevance, importance).
+
+## Data and Design 
+
+- Include a section header.
+
+- Two paragraphs.
+
+- Use clear and plain writing with no more than two typos or grammatical errors.
+
+- Do not use bullet points or numbered lists.
+
+- Paragraph 1 – Describe the Data:
+
+  * State the unit of analysis (e.g., “We use a county-level dataset”).
+
+  * Provide a brief summary of key variables (e.g., vote totals, fraud counts, integrity scores).
+ 
+  * Do not refer to variables using the raw column names in the dataset. 
+
+  * Mention the sources of each variable (e.g., “Election data from MIT Election Lab; Heritage Foundation for fraud/integrity data”).
+
+- Paragraph 2 – Describe Your Design/Approach:
+
+  * Explain how you plan to use or visualize the data (e.g., compare vote changes to integrity scores, or deviations in vote share vs. fraud frequency).
+ 
+  * Do not refer to specific R functions or packages as you describe how you'll visualize the data. You can say "First, we'll map out the distribution of Republican vote shares in the 2024 election." Don't say, "First, we'll use ggplot() and geom_sf() to create a map of Republican vote shares."
+
+# Analysis 
+
+- Include a section header.
+
+- Four paragraphs.
+
+- Use clear and plain writing with no more than two typos or grammatical errors.
+
+- Do not use bullet points or numbered lists.
+
+- Include four data visualizations in total (no more or less).
+
+- At least one of the data visualizations must be a map of the U.S. showing the distribution of a variable of interest.
+
+- At least one of the data visualizations must show the distribution of one variable of your choice using a histogram, density plot, or bar plot (e.g., fraud frequency, vote shift).
+
+- At least one of the data visualizations must show the relationship between two variables using a scatter plot.
+
+- All figures must have:
+
+  * A figure number and title (e.g., “Figure 1: The title...”).
+
+  * A title in the assertion–evidence format (title states the finding).
+
+  * No sub-figure numbering (e.g., do not use “Figure 1a” / “1b”).
+  
+  * Clear labels, no chart junk, and no data errors.
+
+- For each visualization write a paragraph that:
+  
+  * Comes *before* the data visualization.
+
+  * Starts with a clear assertion about what the data shows.
+
+  * Gives a brief summary describing how to "read" the visualization.
+  
+  * Explains how the data supports your assertion.
+ 
+- No raw R output, tables, or statistical model results may appear anywhere in the text.
+
+## Conclusion
+
+- Include a section header.
+
+- 1-2 paragraphs. 
+
+- Use clear and plain writing with no more than two typos or grammatical errors.
+
+- Summarize your findings.
+
+- Go beyond summary and offer broader insights or claims about what your findings mean for understanding election integrity and fraud narratives. Feel free to pull from any of our readings.
+
+## Citations
+
+- If you reference something that isn't common knowledge, you should cite your source.
+
+- Use in-text hyperlinks for citations rather than a traditional works cited style.
+
+\clearpage
 
 ## Details about the data
 
-To access the data for this assignment, simply run the following code:
+I have included the dataset for you to download on Canvas. It's called "ma1_dataset.csv."
 
-```{r}
-#| echo: true
-library(tidyverse)
-data_url <- "https://tinyurl.com/2s3sum5s"
-ma1_data <- read_csv(data_url)
-```
+The data contains 3,151 rows. For each observation in the data, there are 19 columns with the corresponding names and definitions:
 
-The data contains 51 rows (one for each U.S. state and the District of Columbia). For each observation in the data, there are `r ncol(ma1_data)` columns with the corresponding names and definitions:
+* `state_name`: The full state name.
 
-* `state`: State names.
-* `state_po`: State abbreviations.
-* `dem_2016` and `dem_2020`: Counts of ballots cast for the Democratic presidential candidate in 2016 and 2020, respectively.
-* `rep_2016` and `rep_2020`: Counts of ballots cast for the Republican presidential candidate in 2016 and 2020, respectively.
-* `other_2016` and `other_2020`: Counts of ballots cast for third-party presidential candidates in 2016 and 2020, respectively.
-* `total_2016` and `tota_2020`: Total counts of ballots cast for presidential candidates in 2016 and 2020, respectively.
-* `fraud_rank`: Election integrity ranking based on Heritage Foundation election integrity scores. Higher scores indicate that a state has worse election integrity.
-* `fraud_score`: Election integrity scores as measured by the Heritage Foundation. Scores can theoretically range from 0 to 100 with 100 indicating the highest level of integrity and 0 the lowest.
-* `cum_fruad_82_24`: A count of the cumulative number of discovered and confirmed voter fraud cases identified by the Heritage Foundation from 1982 to 2024. Higher numbers indicate more instances of proven fraud.
+* `county_name`: The full county name.
+
+* `state_abbr`: The state abbreviation.
+
+* `rep24`: The vote total for Donald Trump (the Republican presidential candidate) in 2024.
+
+* `dem24`: The vote total for Kamala Harris (the Democratic presidential candidate) in 2024.
+
+* `tot24`: The total number of votes cast for president in 2024.
+
+* `rep20`: The vote total for Donald Trump (the Republican presidential candidate) in 2020.
+
+* `dem20`: The vote total for Joe Biden (the Democratic presidential candidate) in 2020.
+
+* `tot20`: The total number of votes cast for president in 2020.
+
+* `rep_share24`: The vote share for Donald Trump (the Republican presidential candidate) in 2024.
+
+* `dem_share24`: The vote share for Kamala Harris (the Democratic presidential candidate) in 2024.
+
+* `rep_margin24`: The Republican vote share minus the Democratic vote share.
+
+* `rep_share20`: The vote share for Donald Trump (the Republican presidential candidate) in 2020.
+
+* `dem_share20`: The vote share for Joe Biden (the Democratic presidential candidate) in 2020.
+
+* `rep_margin20`: The Republican vote share minus the Democratic vote share.
+
+* `rep_shift`: The change in the Republican vote margin in 2024 relative to 2020.
+
+* `fraud_cases`: The total number of documented fraud cases in a given state according to the Heritage Foundation.
+
+* `integrity_score`: The election integrity score per state created by the Heritage Foundation. Scores can theoretically range from 0 to 100 where 100 is the best and 0 is the worst.
+
+* `integrity_cat`: Contains 5 qualitative categories for election integrity, ranging from "1. Excellent" to "5. Terrible".
+ 

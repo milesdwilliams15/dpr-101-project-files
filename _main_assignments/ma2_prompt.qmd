@@ -1,51 +1,146 @@
 ---
-format: 
-  docx:
-    reference-doc: ../quarto_template.docx
-    number-sections: true
-    number-depth: 3
-    fig-dpi: 500
-    fig-align: center
-    fig-height: 4
-    fig-width: 6
-execute: 
-  echo: false
-  warning: false
-  message: false
+title: "Main Assignment 2"
+format: docx
 ---
 
-## MA2 Instructions
+Is war disappearing? This is the question we've been asking again and again in this unit of the class. It also is the question you'll try to find an answer to in this main assignment. But, there's going to be a twist.
 
-As we've discussed in class, the *long peace* is the idea that the world is becoming less warlike, both in terms of war's frequency, and in terms of its deadliness. Despite being straightforward in its claims, the task of confirming the long peace (or descernable trends in war generally) is tricky. There are many data questions that don't have obvious, objectively true answers. Should we measure wars started over time by total counts or should we adjust, somehow, for the likelihood that countries can fight each other in the first place? And should we measure conflict size by total deaths per conflict or should we adjust for population size?
+As you already know, you can get different answers to this question based on how you choose to look at the data. But you might also get some different answers by looking at different datasets entirely. So let me introduce you to the new [Militarized Interstate Confrontations](https://internationalconflict.ua.edu/data-download/) (MIC) dataset hosted by the [International Conflict Data Project](https://internationalconflict.ua.edu/) at the University of Alabama.
 
-For this main assignment, I've given you a dataset that lets you chart your own path in adjudicating these issues. Your mission is to see if you can find evidence of the long peace in the data. You'll do so by producing two data visualizations. The first will show the trend in the frequency/rate of conflicts over time, comparing *two or more* alternative ways of quantifying the frequency/rate. The second will show the trend in the size of conflicts by total battle deaths, again comparing *two or more* alternative ways of quantifying size. Be creative and draw on the skills you've learned so far in the class to make the best possible data visualizations you can. 
+If you read [the associated documentation](https://internationalconflict.ua.edu/wp-content/uploads/2023/07/MICcodebook.pdf), you'll see that the MIC dataset was created in response to deficiencies in the Correlates of War [Militarized Interstate Dispute](https://correlatesofwar.org/data-sets/mids/) (MID) dataset. After a lengthy and unproductive back-and-forth with the MID dataset folks, the political scientists Douglas Gibler and Steve Miller set out to create a new dataset that would both rival and surpass the MID dataset. As these researchers state in their documentation:
 
-I also have some requirements for how you structure your submission. You must adhere to the following outline:
+> Our data collection efforts began with the original Militarized Interstate Dispute (MID) dataset from the Correlates of War Project (CoWMID) (Jones, Bremer and Singer, 1996). We found an overwhelming number of errors in the original data and corrected those data, providing all of our suggested changes to the CoWMID Project dataset hosts. However, after more than nine years of communications with CoWMID and several exchanges in *International Studies Quarterly*, it is apparent that CoWMID admits their pre-2002 data is incredibly error-prone but that they have neither the resources nor inclination to fix those thousands of admitted errors. Therefore, we are introducing the Militarized Interstate Confrontation (MICs) data, which are based on proper use of MID coding rules and include numerous advancements in both information and presentation.
 
-1. **Introduction**: In *one* paragraph, clearly state the question/problem you will address, and talk about why it matters.
-2. **Data and Design**: In two paragraphs, describe the data you will use in your analysis and how you will use it. In describing the data you should mention: a) *what the unit of analysis is (e.g., "I use a year-level dataset...")*; b) *a brief summary of the variables you'll use (e.g., "Our data is populated with incidents of international conflict and battle deaths")*; and c) *a quick statement about where the variables in the data came from (e.g., "Conflict data comes from the Militarized Interstate Events (MIEs) dataset produced by the International Conflict Data Project (ICDP).").* To describe how you'll use the data, you might say something like: "To test the long peace, I will examine conflict frequency as well as rate per politically relevant country-pairs, and I will look at conflict intensity by total battle deaths as well as deaths per capita."
-3. **Analysis**: In this section you'll include your data visualizations and your text walking your audience through them. *You should summarize each data visualization you make in a paragraph that appears before the graph itself.* Don't just start your paragraph by saying "Figure 1 shows..." Instead, be more creative and try to tell a story with the data. Also, your analysis should consist entirely of data visualizations. *Do NOT report raw R output, data tables, the results from statistical analysis like correlations or regression models, etc.* I will dock points on your submission if you do this. This is a class on data visualization, and this assignment is about honing your ability to make good data visualizations and then use them to drive a story you want to tell with data. Statistics and models aren't bad, but this is not the place for them. Also, you should only include *two* data visualizations.
-4. **Conclusion**: Wrap up your submission with one or two paragraphs that discuss the implications of your findings. Don't just summarize your findings. Think big and make potentially bold claims about what your findings mean for your audience and society.
+In short, these guys claim to have made the dataset that CoWMID always wanted to have, but failed to produce (either through lack of resources or will power).
 
+That's a tall order, but the more interesting implication that comes from this new dataset is that it might offer a different answer to the question of whether war is disappearing. After all, the MIC dataset creators say they've fixed several thousand errors in CoWMID. That seems substantial.
 
-Other rules:
+**Your goal in this main assignment is to write up an analysis that compares the MID and MIC datasets to see if they provide similar or conflicting inferences about the occurrence of international conflict over the past two centuries.**
 
-* I would prefer it if you use the `_ma_template.qmd` file to format a Quarto document that you then render to a .docx file for your submission. The template file that I have given you is set up to report your code at the end of your rendered document so that I can see it.
-* If you cite external sources, you should cite them by hyperlinking your text. You don't need to include a formal "References" or "Works Cited" section.
-* Make sure your submission includes your name and a title.
-* You should title your data visualizations using a convention like "Figure 1: Helpful summary." Do not use unnecessary designations like "Figure 1a" or "Figure 1b" if you have related figures. They might be related, but they are separate and deserve their own unique number.
+Your analysis will center around **two figures**. One will compare the count of conflicts over time, and the other will compare the conflict rate over time. Each figure will show the trend for the MID and MIC datasets in parallel, and both should showcase three skills that we learned this unit: (1) use of the `{geomtextpath}` package, (2) use of `{coolorrr}`, and (3) use of a custom plotting theme. You'll need to do some data wrangling to make each figure, too.
 
-\newpage
+You have some choices about the variables you'll use to count up conflicts and to calculate rates, and you'll need to offer justifications for the choices you end up making. You might choose to count unique conflict instances, or you might choose to count the number of country pairs involved in conflicts. Also, you might choose to calculate the conflict rate per all country pairs, or only by politically relevant country pairs. In the latter case, you have two options for calculating political relevance. A variable called "prd1" is the classic measure of relevance which takes the value "1" if a country in a pair is a major power or if the countries are contiguous (sharing a border or separated by no more than 400 miles of water). Another variable called "prd2" is the [Braumoeller-Carson measure of relevance](https://journals.sagepub.com/doi/10.1177/0022002710393918) which is probabilistic rather than deterministic, meaning it takes a value between 0 and 1 where values closer to 1 mean that the chance that two countries could reach each other to fight is high.
 
-## Details about the data
+You'll write up your findings in a report. You may use the main assignment Quarto template attached in Canvas. Below I've listed out an outline for how I expect this report to look. Each item is worth an equal share of your final grade.
 
-To access the data for this assignment, simply run the following code:
+## Preamble
+
+-   Include a title for your submission.
+
+-   Include your name.
+
+## Introduction
+
+-   Include a section header.
+
+-   Should be one paragraph.
+
+-   Use clear and plain writing with smooth transitions and no more than two typos or grammatical errors.
+
+-   Clearly state your research question (must end with a question mark).
+
+-   Explain why the question matters (context, relevance, importance).
+
+## Data and Design
+
+-   Include a section header.
+
+-   Two paragraphs (no more or less).
+
+-   Use clear and plain writing with smooth transitions and no more than two typos or grammatical errors.
+
+-   Do not use bullet points or numbered lists.
+
+-   Paragraph 1 – Describe the Data:
+
+    -   State the unit of analysis (e.g., “yearly conflict data”).
+
+    -   Indicate the sources of your data (MIC and MID).
+
+    -   Provide a brief summary of key variables (e.g., number of uses of force between countries, number of politically relevant country pairs), and provide a justification for the ones you select.
+
+    -   Do not refer to variables using the raw column names in the dataset.
+
+-   Paragraph 2 – Describe Your Design/Approach:
+
+    -   Explain how you plan to use or visualize the data.
+
+    -   Do not refer to specific R functions or packages as you describe how you'll visualize the data.
+
+# Analysis
+
+-   Include a section header.
+
+-   Two paragraphs (no more or less).
+
+-   Use clear and plain writing with smooth transitions and no more than two typos or grammatical errors.
+
+-   Do not use bullet points or numbered lists.
+
+-   No raw R output, tables, or statistical model results may appear anywhere in the text.
+
+-   Include 2 data visualizations in total (no more or less).
+
+-   Both data visualizations must demonstrate use of `{geomtextpath}`, a custom color palette with `{coolorrr}`, and a custom plotting theme.
+
+-   All data visualizations must have:
+
+    -   A figure number and title (e.g., “Figure 1: The title...”).
+
+    -   The title should follow the assertion–evidence format where the title states the finding from the data you want to highlight.
+
+    -   No sub-figure numbering (e.g., do not use “Figure 1a” / “1b”).
+
+    -   Clear labels without typos, no chart junk, and no data errors.
+
+-   For each data visualization write a paragraph that:
+
+    -   Comes *before* the data visualization.
+
+    -   Starts with a clear assertion about what the data shows.
+
+    -   Gives a brief summary of how to "read" the visualization so your readers can see how the data supports your assertion.
+
+## Conclusion
+
+-   Include a section header.
+
+-   1-2 paragraphs.
+
+-   Use clear and plain writing with smooth transitions and no more than two typos or grammatical errors.
+
+-   Summarize your findings.
+
+-   Go beyond summary and offer broader insights or claims about the implications of your findings.
+
+## Code appendix
+
+You should have all of the code used for the analysis appear at the end of your submission.
+
+## Citations
+
+-   If you reference something that isn't common knowledge, you should cite your source.
+
+-   Use in-text hyperlinks for citations rather than a traditional works cited style.
+
+\clearpage
+
+## Accessing the data
+
+For this analysis you'll need to start by creating a dyad-year dataset that you then populate with MID and MIC variables, along with information on political relevance. From there you'll need to do some data wrangling to get it ready for visualization. The code below will get you started with the dyad-year data. The rest is up to you.
 
 ```{r}
-#| echo: true
+#| eval: false
 library(tidyverse)
-data_loc <- here::here("_data", "mie-1.0.csv")
-ma2_data <- read_csv(data_loc)
-```
+library(peacesciencer)
+source("https://tinyurl.com/peacesciencerextras") 
+  # creates add_icd_mics() and add_relevance()
 
-You can read more about the data by checking its codebook online: [MIE codebook](https://internationalconflict.ua.edu/wp-content/uploads/2023/07/MIEcodebook.pdf)
+create_dyadyears(
+  directed = F,
+  subset_years = 1816:2014
+) |>
+  add_cow_mids() |>
+  add_icd_mics() |>
+  add_relevance() -> dt
+```

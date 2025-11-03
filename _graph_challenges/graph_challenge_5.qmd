@@ -16,14 +16,23 @@ execute:
   message: false
 ---
 
-For this graph challenge your mission is to see if you can replicate the data visualization that I posted on this assignment's prompt in Canvas. Below I've given you the code you need to read in the data, but that's all. This dataset comes directly from the Correlates of War Project, and it provides country level detail on different participants in all-out wars over time. There are 95 wars in total in the dataset.
+For this graph challenge your mission is to create a plot showing the percentage of countries in the world involved in a conflict with any other country in the world from 1816 to 2014. You'll use the "peacesciencer" package to create your dataset. Below the figure, write a short summary that makes an assertion about what the data says (the finding) about country involvement in conflicts over time and explains how the plot supports your assertion.
 
-I'll also give you a hint. To add the war labels with lines connecting them I used the `{ggrepel}` package. You can install it by writing `install.packages("ggrepel")` in the R console. Good luck!
+The appearance of the plot is up to you. It could be a line plot, a column plot, or even a scatter plot (potentially with a smoothed regression line). Just make it look good and make smart choices.
 
-```{r}
-## read in the data
-library(tidyverse)
-url <- "https://raw.githubusercontent.com/milesdwilliams15/Teaching/refs/heads/main/DPR%20101/Data/Inter-StateWarData_v4.0.csv"
-wars <- read_csv(url)
-```
+The hardest part of this challenge isn't the data visualization itself. It's constructing the dataset you need to make the plot. But don't worry, I've broken the problem down into steps. If you follow them, you should have no trouble.
+
+Here they are:
+
+1. Create a dyad-year dataset and add conflict data to it (use `add_cow_mids()`).
+
+2. Use a combination of `group_by()` and `summarize()` to make a dataset at the country-year level for country 1 with a column indicating the number of times a given country was in a MID with another country in the data.
+
+3. Use `mutate()` to add a new column to the dataset that is a 1 in years that a country was involved in a MID and a 0 otherwise.
+
+4. Group the data by year and summarize the number of countries involved in a MID.
+
+5. Plot the results.
+
+
 

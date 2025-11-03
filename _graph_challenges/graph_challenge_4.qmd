@@ -16,23 +16,16 @@ execute:
   message: false
 ---
 
-For this graph challenge, you will produce a graph that compares two different metrics for militarized interstate dispute (MID) initiation rate over time. Remember that a rate is calculated with a numerator and a denominator (miles per gallon is a good example of a rate). When it comes to calculating the MID initiation rate, we can compute the yearly rate conflicts get started by dividing the number of newly initiated MIDs by the total number of countries in the world at a given point in time. We can also use a modified denominator that accounts for the fact that countries have different opportunities for starting conflicts. A major power that is close to many other countries will have more opportunities to start fights than a non-major power that is geographically isolated, for example. How might our assessment of conflicts over time change by adjusting for opportunity?
-
-For this graph challenge you'll produce a graph that shows both the unadjusted yearly rate of MID initiation and the yearly rate of MID initiation adjusting for opportunity. The first is just the number of initiated MIDs divided by the total number of countries. The second is the number of initiated MIDs divided by the sum of country opportunities to fight. 
-
-I've already included code to open the packages you need along with a call to the `source()` function which reads in a special "helper function" I've created called `add_opportunity()`. This function works just like other `{peacesciencer}` `add_*()` functions, and it will populate a country-year dataset with a new column called `opportunity`. Its values represent the share of countries in the world in a given year that a country could potentially start fights with. It's computed using the Braumoeller-Carson metric of political relevance. Google "Political Irrelevance, Democracy, and the Limits of Militarized Conflict" if you want to learn more about the origins of this measure.
-
-The rest of the code is up to you. The skills you need to complete this task are covered in the lecture notes and our in-class discussion. You'll need to create a state-year dataset with measures of MIDs and of opportunity, collapse it to the year level with metrics for the unadjusted and adjusted MID initiation rate, and then give this data to `ggplot()` to compare these metrics. After you've produced your graph, write a brief summary of what it shows and offer your thoughts on whether the unadjusted or adjusted measure provides a better picture of conflict initiation over time.
+If you run the below code, it will read in a dataset with state-level returns from the 2020 and 2024 US presidential election and save it as an object called `dt`.
 
 ```{r}
-## open packages
 library(tidyverse)
-library(peacesciencer)
-library(socsci)
-source(
-  "https://raw.githubusercontent.com/milesdwilliams15/dpr-101-project-files/refs/heads/main/_helper_functions/add_opportunity.R"
+dt <- read_csv(
+  "https://raw.githubusercontent.com/milesdwilliams15/dpr-101-project-files/refs/heads/main/_data/state_data_2024.csv"
 )
 ```
+
+Combine this dataset with another produced using the "usmap" package, and create a map of the US that shows the state-level shift to or away from the Republican Party in 2024 relative to 2020 (rep_shift). Once you produce the data visualization, provide a short and clear summary of what the data says.
 
 
 
