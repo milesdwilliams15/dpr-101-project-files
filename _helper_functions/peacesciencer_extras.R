@@ -1,4 +1,4 @@
-##########################################################
+s##########################################################
 # Add MIC and political relevance variables to a dataset #
 ##########################################################
 
@@ -761,9 +761,11 @@ add_int_order <- function(data) {
   
   data$order_status <- "Same Order"
   data$order_status[
-    data$outsideorder == 1 | 
-      data$beyondorders == 1
-  ] <- "Outside & Beyond"
+    data$outsideorder == 1 
+  ] <- "In vs. Out"
+  data$order_status[
+    data$beyondorders == 1
+  ] <- "Outside Order"
   data$order_status[
     data$betweenorders == 1
   ] <- "Competing Orders"
